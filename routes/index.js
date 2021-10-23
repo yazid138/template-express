@@ -1,3 +1,3 @@
-const routes = ["mahasiswa", "home"];
+const routes = ["home"];
 
 module.exports = routes;

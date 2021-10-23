@@ -15,29 +15,31 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-const routes = require("./routes/index");
+const routes = require("./routes");
 
-routes.forEach((e) => {
-	require("./routes/" + e + ".routes")(app);
-});
-// catch 404 and forward to error handlser
+if (routes.length > 0) {
+	routes.forEach((e) => {
+		require("./routes/" + e + ".routes")(app);
+	});
+}
+// catch 404 and forward to error handler
 
 app.use(function (req, res, next) {
 	res.status(404).json({
 		status: 404,
-		message: "Page Not Found",
+		message: "page not found",
 	});
-	// next(createError(404));
+	next(createError(404));
 });
 
 // error handler
-// app.use(function(err, req, res, next) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(function (err, req, res, next) {
+	// set locals, only providing error in development
+	res.locals.message = err.message;
+	res.locals.error = req.app.get("env") === "development" ? err : {};
 
-//   // render the error page
-//   res.status(err.status || 500);
-// });
+	// render the error page
+	res.status(err.status || 500);
+});
 
 module.exports = app;
